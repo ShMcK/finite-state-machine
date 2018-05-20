@@ -1,4 +1,5 @@
-export default {
+export const basic = {
+  name: 'basic',
   state: 'idle',
   transitions:  {
     'idle': {
