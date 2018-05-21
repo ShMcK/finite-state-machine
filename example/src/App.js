@@ -22,6 +22,12 @@ class App extends Component {
                 </button>
               ))}
               </div>
+
+              <div>
+                {state === 'fetching' && (
+                  <div>loading...</div>
+                )}
+              </div>
             </div>
           )}
         </Consumer>
