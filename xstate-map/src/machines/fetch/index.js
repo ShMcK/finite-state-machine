@@ -8,22 +8,20 @@ const machine = Machine({
   states: {
     idle: {
       on: {
-        REQUEST: {
-          pending: {
-            actions: ['onAction']
-          }
-        },
+        REQUEST: 'pending',
       },
-      onExit: 'onExit',
     },
     pending: {
       on: {
         SUCCESS: 'idle',
         FAILURE: 'rejected',
-        CANCEL: 'idle',
+        CANCEL: {
+          idle: {
+            actions: ['onRequestCancel']
+          }
+        }
       },
-      onEntry: 'onEnter',
-      onExit: 'onExit',
+      onEntry: 'onRequest',
     },
     rejected: {
       on: {

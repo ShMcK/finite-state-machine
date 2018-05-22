@@ -1,11 +1,13 @@
-export const onEnter = (x, dispatch) => {
-  console.log('onEnter')
+
+let requestTimeout
+
+export const onRequestCancel = () => {
+  clearTimeout(requestTimeout)
 }
 
-export const onExit = () => {
-  console.log('onExit')
-}
-
-export const onAction = () => {
-  console.log('onAction')
+export const onRequest = (_, dispatch) => {
+  // always fails
+  requestTimeout = setTimeout(() => {
+    dispatch('FAILURE')
+  }, 3000)
 }

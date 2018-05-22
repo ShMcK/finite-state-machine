@@ -22,7 +22,7 @@ export default class Fetch extends React.Component {
   render() {
     return (
       <div className='Container'>
-        <h5>Fetch (transitions)</h5>
+        <h5>Fetch (async)</h5>
         <h3 className='State'>{this.props.value}</h3>
         <ul className='Options'>
           {this.transitionsList.map(this.transitionItem)}
