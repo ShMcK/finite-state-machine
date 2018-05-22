@@ -1,28 +1,14 @@
 import React from 'react';
 import './Colors.css';
 import ColorsContext from '../../machines/colors'
+import Colors from './Colors'
 
-export default class Colors extends React.Component {
+export default class ColorsHOC extends React.Component {
   render() {
     return (
       <ColorsContext.Provider>
         <ColorsContext.Consumer>
-          {({ value, transitions, dispatch }) => {
-            const styles = { backgroundColor: value.background, color: value.text }
-            return (
-              <div className='Container' style={styles}>
-                <h5>Colors (parallel)</h5>
-                <button
-                  className='Button'
-                  onClick={() => dispatch('TOGGLE_BACKGROUND')}
-                >Background</button>
-                <button
-                  className='Button'
-                  onClick={() => dispatch('TOGGLE_TEXT')}
-                >Text</button>
-              </div>
-            )
-        }}
+          {props => <Colors {...props} />}
         </ColorsContext.Consumer>
       </ColorsContext.Provider>
     );

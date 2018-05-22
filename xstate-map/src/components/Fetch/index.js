@@ -1,29 +1,15 @@
 import React, { Component } from 'react';
 import './Fetch.css';
 import FetchContext from '../../machines/fetch'
+import Fetch from './Fetch'
 
-export default class Fetch extends Component {
+export default class FetchModule extends Component {
   render() {
     return (
       <FetchContext.Provider>
         <FetchContext.Consumer>
-          {({ value, transitions, dispatch }) => (
-            <div className='Container'>
-              <h5>Fetch (transitions)</h5>
-              <h3 className='State'>{value}</h3>
-              <ul className='Options'>
-                {Object.keys(transitions || {}).map((transition) => (
-                  <li key={transition}>
-                    <button
-                      className='Button'
-                      onClick={() => dispatch(transition)}
-                    >
-                      {transition}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {props => (
+            <Fetch {...props} />
           )}
         </FetchContext.Consumer>
       </FetchContext.Provider>

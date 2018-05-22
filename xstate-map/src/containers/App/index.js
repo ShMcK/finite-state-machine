@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
-import Fetch from '../../components/Fetch'
-import Colors from '../../components/Colors'
+import FetchModule from '../../components/Fetch'
+import ColorsModule from '../../components/Colors'
 
 export default class App extends Component {
   render() {
     return (
       <div className='App'>
-        <Fetch />
-        <Colors />
+        <FetchModule />
+        <ColorsModule />
       </div>
     );
   }
