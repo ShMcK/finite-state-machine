@@ -1,9 +1,11 @@
 import React from 'react'
-import * as actionMap from './actions'
 
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 
-export default function createXStateContext ({ name, machine }) {
+export default function createXStateContext ({ name, machine, actions }) {
+  actions = actions || {}
+  name = name || 'defaultName'
+
   const Context = React.createContext(name)
   
   class Provider extends React.Component {
@@ -17,29 +19,31 @@ export default function createXStateContext ({ name, machine }) {
       const nextState = machine.transition(this.state.value, event)
   
       for (const actionKey of nextState.actions) {
-        const action = actionMap[actionKey]
+        const action = actions[actionKey]
         if (action) {
           action(event, this.dispatch)
         }
       }
 
-      // handle parallel states
-      if (typeof nextState.value === 'object') {
-        const value = {}
-        const transitions = []
-        for (const stateKey of Object.keys(nextState.value)) {
-          value[stateKey] = nextState.value[stateKey]
-          if (machine.states[nextState.value[stateKey].on]) {
-            transitions.push(machine.states[nextState.value[stateKey].on])
+      switch(typeof nextState.value) {
+        // handle parallel or nested states
+        case 'object':
+          const value = {}
+          const transitions = []
+          for (const stateKey of Object.keys(nextState.value)) {
+            value[stateKey] = nextState.value[stateKey]
+            if (machine.states[nextState.value[stateKey].on]) {
+              transitions.push(machine.states[nextState.value[stateKey].on])
+            }
           }
-        }
-        this.setState({ value, transitions })
-      } else {
-        // handle single state
-        this.setState({
-          value: nextState.value,
-          transitions: machine.states[nextState.value].on
-        })
+          this.setState({ value, transitions })
+          break
+        default:
+          // handle default state
+          this.setState({
+            value: nextState.value,
+            transitions: machine.states[nextState.value].on
+          })
       }
     }
     render() {

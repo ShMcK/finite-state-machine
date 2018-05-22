@@ -1,5 +1,5 @@
 import { Machine } from 'xstate'
-import XStateContext from '../lib/XStateContext'
+import XStateContext from '../../lib/XStateContext'
 
 const machine = Machine({
   key: 'colors',
