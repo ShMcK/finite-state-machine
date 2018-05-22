@@ -2,6 +2,7 @@ import { Machine } from 'xstate'
 import XStateContext from '../lib/XStateContext'
 
 const machine = Machine({
+  key: 'fetch',
   initial: 'idle',
   states: {
     idle: {
@@ -31,4 +32,4 @@ const machine = Machine({
   }
 })
 
-export default XStateContext({ name: 'map', machine })
+export default XStateContext({ name: 'fetch', machine })

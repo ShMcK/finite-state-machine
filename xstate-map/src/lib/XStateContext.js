@@ -5,12 +5,13 @@ const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 
 export default function createXStateContext ({ name, machine }) {
   const Context = React.createContext(name)
-
+  
   class Provider extends React.Component {
     static displayName = `${capitalize(name)}Provider`
+    
     state = {
-      value: machine.initial,
-      transitions: machine.states[machine.initial].on
+      value: machine.initialStateValue,
+      transitions: machine.states[machine.initialStateValue] ? (machine.states[machine.initialStateValue].on || []) : []
     }
     dispatch = (event) => {
       const nextState = machine.transition(this.state.value, event)
@@ -21,12 +22,25 @@ export default function createXStateContext ({ name, machine }) {
           action(event, this.dispatch)
         }
       }
-  
-      // update the atomic state (yes, there's better ways of doing this)
-      this.setState({
-        value: nextState.value,
-        transitions: machine.states[nextState.value].on
-      })
+
+      // handle parallel states
+      if (typeof nextState.value === 'object') {
+        const value = {}
+        const transitions = []
+        for (const stateKey of Object.keys(nextState.value)) {
+          value[stateKey] = nextState.value[stateKey]
+          if (machine.states[nextState.value[stateKey].on]) {
+            transitions.push(machine.states[nextState.value[stateKey].on])
+          }
+        }
+        this.setState({ value, transitions })
+      } else {
+        // handle single state
+        this.setState({
+          value: nextState.value,
+          transitions: machine.states[nextState.value].on
+        })
+      }
     }
     render() {
       const value = {

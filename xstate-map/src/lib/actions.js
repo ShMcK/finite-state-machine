@@ -1,4 +1,4 @@
-export const onEnter = () => {
+export const onEnter = (x, dispatch) => {
   console.log('onEnter')
 }
 
