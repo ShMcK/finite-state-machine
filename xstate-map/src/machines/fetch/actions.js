@@ -1,13 +1,14 @@
 
-let requestTimeout
-
-export const onRequestCancel = () => {
-  clearTimeout(requestTimeout)
-}
-
-export const onRequest = (_, dispatch) => {
-  // always fails
-  requestTimeout = setTimeout(() => {
-    dispatch('FAILURE')
-  }, 3000)
+export default (dispatch) => {
+  let requestTimeout
+  return {
+    onRequestCancel() {
+      clearTimeout(requestTimeout)
+    },
+    onRequest() {
+      requestTimeout = setTimeout(() => {
+        dispatch('FAILURE')
+      }, 3000)
+    }
+  }
 }

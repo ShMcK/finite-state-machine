@@ -1,6 +1,6 @@
 import { Machine } from 'xstate'
 import XStateContext from '../../lib/XStateContext'
-import * as actions from './actions'
+import actions from './actions'
 
 const machine = Machine({
   key: 'fetch',

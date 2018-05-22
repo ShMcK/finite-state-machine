@@ -3,7 +3,6 @@ import React from 'react'
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 
 export default function createXStateContext ({ name, machine, actions }) {
-  actions = actions || {}
   name = name || 'defaultName'
 
   const Context = React.createContext(name)
@@ -15,13 +14,16 @@ export default function createXStateContext ({ name, machine, actions }) {
       value: machine.initialStateValue,
       transitions: machine.states[machine.initialStateValue] ? (machine.states[machine.initialStateValue].on || []) : []
     }
+
+    actions = actions ? actions(this.dispatch) : {}
+
     dispatch = (event) => {
       const nextState = machine.transition(this.state.value, event)
   
       for (const actionKey of nextState.actions) {
-        const action = actions[actionKey]
+        const action = this.actions[actionKey]
         if (action) {
-          action(event, this.dispatch)
+          action(event)
         }
       }
 
