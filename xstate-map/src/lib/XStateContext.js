@@ -9,14 +9,16 @@ export default function createXStateContext ({ name, machine, actions }) {
   
   class Provider extends React.Component {
     static displayName = `${capitalize(name)}Provider`
-    
-    state = {
-      value: machine.initialStateValue,
-      transitions: machine.states[machine.initialStateValue] ? (machine.states[machine.initialStateValue].on || []) : []
+    constructor(props) {
+      super(props)
+      const value = machine.initialStateValue
+      this.state = {
+        value,
+        transitions: machine.states[value] ? (machine.states[value].on || []) : []
+      }
+      this.actions = actions ? actions(this.dispatch) : {}
     }
-
-    actions = actions ? actions(this.dispatch) : {}
-
+    
     dispatch = (event) => {
       const nextState = machine.transition(this.state.value, event)
   
@@ -48,6 +50,7 @@ export default function createXStateContext ({ name, machine, actions }) {
           })
       }
     }
+
     render() {
       const value = {
         dispatch: this.dispatch,

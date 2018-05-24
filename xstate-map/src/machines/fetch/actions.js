@@ -5,7 +5,7 @@ export default (dispatch) => {
     onRequestCancel() {
       clearTimeout(requestTimeout)
     },
-    onRequest() {
+    onRequest(event, value) {
       requestTimeout = setTimeout(() => {
         dispatch('FAILURE')
       }, 3000)
